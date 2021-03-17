@@ -12,4 +12,10 @@ Please refer to [Building a **serverless tokenization solution** to **mask sensi
  
 1. [ ] [AWS Account](https://aws.amazon.com/free)
 2. [ ] [AWS Cloud9-IDE](https://docs.aws.amazon.com/cloud9/latest/user-guide/tutorial-create-environment.html) for writing, running and debugging code on the cloud: `./cloud9.sh`
-3. [ ] `./deploy.sh`
+
+```
+git clone https://github.com/nnthanh101/serverless-tokenization
+cd serverless-tokenization
+
+./deploy.sh
+```

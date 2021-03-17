@@ -12,7 +12,7 @@ echo "[+] Step 1. Create KMS - Customer Managed Keys"
 echo "#########################################################"
 echo
 
-export STACK_NAME=KMS-Stack
+export STACK_NAME=KMS-Key
 cd ${STACK_NAME}
 
 echo "1.1. Build the SAM template template.yaml"
