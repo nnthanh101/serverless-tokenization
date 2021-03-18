@@ -42,7 +42,7 @@ echo "#########################################################"
 echo
 
 export STACK_NAME2=tokenizer
-cd ${STACK_NAME2}
+cd ../${STACK_NAME2}
 
 echo "2.1. Run the script to compile and install the dependent libraries in dynamodb-client/python/ directory"
 source ./get_AMI_packages_cryptography.sh
