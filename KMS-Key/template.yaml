@@ -31,5 +31,5 @@ Resources:
 
 Outputs:
   KMSKeyID:
-    Description: ARN for CMK Key created
+    Description: ARN for KMS-CMK Key created
     Value: !GetAtt CMKey.Arn
