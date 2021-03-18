@@ -36,6 +36,10 @@ sam deploy --stack-name ${STACK_NAME}                                       \
 echo "CloudFormation > Describe Stack ${STACK_NAME}"
 aws cloudformation describe-stacks --stack-name ${STACK_NAME}
 
+echo "YourKMSArn arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT}:key/___"
+YourKMSArn=$(aws kms list-aliases | jq -r '.[] | .[0].AliasArn')
+echo ${YourKMSArn}
+
 echo
 echo "#########################################################"
 echo "[+] Step 2. Create Lambda Layer for String Tokenization & Encrypted Data Store"
@@ -72,6 +76,13 @@ sam deploy --stack-name ${STACK_NAME2}                          \
 echo "CloudFormation > Describe Stack ${STACK_NAME2}"
 aws cloudformation describe-stacks --stack-name ${STACK_NAME2}
 
+echo "YourLayervErsionArn arn:aws:lambda:${AWS_REGION}:${AWS_ACCOUNT}:layer:TokenizeData:___"
+YourLayervErsionArn=$(aws cloudformation list-exports | jq -r '.[] | .[0].Value')
+echo ${YourLayervErsionArn}
+
+echo "YourDynamoDBArn arn:aws:dynamodb:${AWS_REGION}:${AWS_ACCOUNT}:table/CreditCardTokenizerTable"
+export YourDynamoDBArn="arn:aws:dynamodb:${AWS_REGION}:${AWS_ACCOUNT}:table/CreditCardTokenizerTable"
+echo ${YourDynamoDBArn}
 
 echo
 echo "#########################################################"
@@ -83,7 +94,7 @@ export STACK_NAME3=M2M-App
 cd ../${STACK_NAME3}
 
 echo "3.1. Build SAM template. Replace the parameters with previously noted values for LayerVersionArn (Step 2.5.)
-sam build --use-container --parameter-overrides layerarn=${YourLambdaLayer}
+sam build --use-container --parameter-overrides layerarn=${YourLayervErsionArn}
 
 echo "3.2. Package the code and push to S3 Bucket."
 sam package --s3-bucket ${S3_BUCKET} --output-template-file packaged.yaml
@@ -97,7 +108,7 @@ sam deploy  --stack-name ${STACK_NAME3}                  \
             --config-file samconfig.toml                 \
             --no-confirm-changeset                       \
             --parameter-overrides                        \
-              layerarn=${YourLambdaLayer}                \
+              layerarn=${YourLayervErsionArn}            \
               kmsid=${YourKMSArn}                        \
               dynamodbarn=${YourDynamoDBArn}             \
             --tags                                       \
@@ -106,39 +117,48 @@ sam deploy  --stack-name ${STACK_NAME3}                  \
 echo "CloudFormation > Describe Stack ${STACK_NAME3}"              
 aws cloudformation describe-stacks --stack-name ${STACK_NAME3}
 
-## FIXME
-export YourLambdaLayer="arn:aws:lambda:${AWS_REGION}:${AWS_ACCOUNT}:layer:TokenizeData:___"
-export YourKMSArn="arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT}:key/___"
-export YourDynamoDBArn="arn:aws:dynamodb:${AWS_REGION}:${AWS_ACCOUNT}:table/CreditCardTokenizerTable"
-export YourLambdaExecutionRole="arn:aws:iam::${AWS_ACCOUNT}:role/M2M-App-LambdaExecutionRole___"
-export YourUserPoolAppClientId="___"
-export YourPaymentMethodApiURL="https://___.execute-api.${AWS_REGION}.amazonaws.com/dev"
+echo "YourUserPoolAppClientId: Cognito >> General settings >> App client id"
+export YourUserPools=$(aws cognito-idp list-user-pools --max-results 10 | jq -r '.[] | .[0].Id')
+export YourUserPoolAppClientId=$(aws cognito-idp list-user-pool-clients --user-pool-id $YourUserPools | jq -r '.[] | .[0].ClientId')
+echo ${YourUserPoolAppClientId}
+
 export ROOTPrincipal="arn:aws:iam::${AWS_ACCOUNT}:root"
 
-POLICY=$(cat << EOF
-{ 
-    "Version": "2012-10-17", 
-    "Id": "kms-cmk-1", 
-    "Statement": [ 
-        { 
-            "Sid": "Enable IAM User Permissions", 
-            "Effect": "Allow", 
-            "Principal": {"AWS": ["$ROOTPrincipal"]}, 
-            "Action": "kms:*", 
-            "Resource": "${YourKMSArn}" 
-        }, 
-        { 
-            "Sid": "Enable IAM User Permissions", 
-            "Effect": "Allow", 
-            "Principal": {"AWS": ["$YourLambdaExecutionRole"]}, 
-            "Action": ["kms:Decrypt", "kms:Encrypt", "kms:GenerateDataKey", "kms:GenerateDataKeyWithoutPlaintext"], 
-            "Resource": "${YourKMSArn}" 
-        } 
-    ] 
-}
-EOF
-); \
-aws kms put-key-policy --key-id "${YourKMSArn}" --policy-name default --policy "$POLICY"
+echo "YourLambdaExecutionRole arn:aws:iam::${AWS_ACCOUNT}:role/M2M-App-LambdaExecutionRole___"
+YourLambdaExecutionRole=`aws cloudformation describe-stacks --region ${AWS_REGION} --stack-name ${STACK_NAME3}  | \
+                         jq -r '.Stacks[].Outputs[] | select(.OutputKey == "LambdaExecutionRole") | .OutputValue'`
+echo ${YourLambdaExecutionRole}
+
+echo "YourPaymentMethodApiURL https://___.execute-api.${AWS_REGION}.amazonaws.com/dev"
+YourPaymentMethodApiURL=`aws cloudformation describe-stacks --region ${AWS_REGION} --stack-name ${STACK_NAME3}  | \
+                         jq -r '.Stacks[].Outputs[] | select(.OutputKey == "PaymentMethodApiURL") | .OutputValue'`
+echo ${YourPaymentMethodApiURL} 
+
+## FIXME
+# POLICY=$(cat << EOF
+# { 
+#     "Version": "2012-10-17", 
+#     "Id": "kms-cmk-1", 
+#     "Statement": [ 
+#         { 
+#             "Sid": "Enable IAM User Permissions", 
+#             "Effect": "Allow", 
+#             "Principal": {"AWS": ["$ROOTPrincipal"]}, 
+#             "Action": "kms:*", 
+#             "Resource": "$YourKMSArn" 
+#         }, 
+#         { 
+#             "Sid": "Enable IAM User Permissions", 
+#             "Effect": "Allow", 
+#             "Principal": {"AWS": ["$YourLambdaExecutionRole"]}, 
+#             "Action": ["kms:Decrypt", "kms:Encrypt", "kms:GenerateDataKey", "kms:GenerateDataKeyWithoutPlaintext"], 
+#             "Resource": "$YourKMSArn" 
+#         } 
+#     ] 
+# }
+# EOF
+# ); \
+# aws kms put-key-policy --key-id "${YourKMSArn}" --policy-name default --policy "$POLICY"
 
 
 # echo
