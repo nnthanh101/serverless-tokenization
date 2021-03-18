@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "fc1f698d-a16e-4b13-9838-bbcd65006fe9",
+		"name": "ServerlessTokenizer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateOrder",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJraWQiOiJhWWJTRm1BUVRKSmV3ckhtcFQzUFJydlBXb280dndOQ1h1S05udU5cL1hzaz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJkOTU3MDZlYy1jMTY0LTRhNGQtODQ5NC02YjVlYjJjMGMwODgiLCJhdWQiOiI2a2kyaWV0ZHAwNmw5bmh0azdiamE1Y2o5cCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6Ijk2OTczMDIwLTliNTUtNGY1Yi1iMWQ0LTZjMTk5OTI2ZTBkNyIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjE2MDgzNjQ4LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGhlYXN0LTIuYW1hem9uYXdzLmNvbVwvYXAtc291dGhlYXN0LTJfTXpNWVN1dW5zIiwiY29nbml0bzp1c2VybmFtZSI6ImQ5NTcwNmVjLWMxNjQtNGE0ZC04NDk0LTZiNWViMmMwYzA4OCIsImV4cCI6MTYxNjA4NzI0OCwiaWF0IjoxNjE2MDgzNjQ4LCJlbWFpbCI6Imh1eW5oaGFjLm5ndXllbkBnbWFpbC5jb20ifQ.Agx21gYrugb8dxRUWIZMwrpqKKFb-pvS41_dHfpydGMichckuv97zqTBBZtwAwDg0iSX1DylQI47E7cv3xEtaPrtg5Gn2M2b-BMWt6f4CFXoJOnyi2ykJaI8rT26ohU1HikgvT5c4pbqHQ409gwabGFvIqiJGzQLovA8Rfb-PBkw0iXE-jf8NfKnxPOk9GMlei6dqI7rYQWDoZkQLIRSizn5haXjRZwsHIlkdJEiY3JW98aaWFkcqkxa5JkeWTf1_jiBSIfwNhK6RJqoInDOaNqt-jwneGPUe73pnvFptUCphkFSKr2f6Vv8p4U9mQGMqR0FhuF6uBMeMyp6fzNfLQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"CustomerOrder\": \"123456789\",\n\"CustomerName\": \"Amazon Web Services\",\n\"CreditCard\": \"0000-0000-0000-0000\",\n\"Address\": \"Unicorn Gym - APJ 2021\"\n}"
+				},
+				"url": {
+					"raw": "{{YourPaymentMethodApiURL}}/order",
+					"host": [
+						"{{YourPaymentMethodApiURL}}"
+					],
+					"path": [
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PayBill",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJraWQiOiJhWWJTRm1BUVRKSmV3ckhtcFQzUFJydlBXb280dndOQ1h1S05udU5cL1hzaz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJkOTU3MDZlYy1jMTY0LTRhNGQtODQ5NC02YjVlYjJjMGMwODgiLCJhdWQiOiI2a2kyaWV0ZHAwNmw5bmh0azdiamE1Y2o5cCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6Ijk2OTczMDIwLTliNTUtNGY1Yi1iMWQ0LTZjMTk5OTI2ZTBkNyIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjE2MDgzNjQ4LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGhlYXN0LTIuYW1hem9uYXdzLmNvbVwvYXAtc291dGhlYXN0LTJfTXpNWVN1dW5zIiwiY29nbml0bzp1c2VybmFtZSI6ImQ5NTcwNmVjLWMxNjQtNGE0ZC04NDk0LTZiNWViMmMwYzA4OCIsImV4cCI6MTYxNjA4NzI0OCwiaWF0IjoxNjE2MDgzNjQ4LCJlbWFpbCI6Imh1eW5oaGFjLm5ndXllbkBnbWFpbC5jb20ifQ.Agx21gYrugb8dxRUWIZMwrpqKKFb-pvS41_dHfpydGMichckuv97zqTBBZtwAwDg0iSX1DylQI47E7cv3xEtaPrtg5Gn2M2b-BMWt6f4CFXoJOnyi2ykJaI8rT26ohU1HikgvT5c4pbqHQ409gwabGFvIqiJGzQLovA8Rfb-PBkw0iXE-jf8NfKnxPOk9GMlei6dqI7rYQWDoZkQLIRSizn5haXjRZwsHIlkdJEiY3JW98aaWFkcqkxa5JkeWTf1_jiBSIfwNhK6RJqoInDOaNqt-jwneGPUe73pnvFptUCphkFSKr2f6Vv8p4U9mQGMqR0FhuF6uBMeMyp6fzNfLQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"CustomerOrder\": \"123456789\"\n}"
+				},
+				"url": {
+					"raw": "{{YourPaymentMethodApiURL}}/paybill",
+					"host": [
+						"{{YourPaymentMethodApiURL}}"
+					],
+					"path": [
+						"paybill"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "YourPaymentMethodApiURL",
+			"value": "https://jsdyi1ywwj.execute-api.ap-southeast-2.amazonaws.com/dev"
+		}
+	]
+}
