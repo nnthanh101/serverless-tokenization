@@ -72,18 +72,6 @@ sam deploy --stack-name ${STACK_NAME2}                          \
 echo "CloudFormation > Describe Stack ${STACK_NAME2}"
 aws cloudformation describe-stacks --stack-name ${STACK_NAME2}
 
-# echo $(aws cognito-identity list-identity-pools --max-results 10)
-# IdentityPoolID=$(aws cognito-identity list-identity-pools --max-results 10 | jq -r '.[] | .[0].IdentityPoolId')
-# echo ${IdentityPoolID}
-
-# echo $(aws dynamodbstreams list-streams --table-name ${PROJECT_ID}Questions)
-# YourDynamoDBStreamARN=$(aws dynamodbstreams list-streams --table-name ${PROJECT_ID}Questions | jq -r '.[] | .[0].StreamArn')
-# echo ${YourDynamoDBStreamARN}
-
-export YourLambdaLayer="arn:aws:lambda:ap-southeast-1:701571471198:layer:TokenizeData:3"
-export YourKMSArn="arn:aws:kms:ap-southeast-1:701571471198:key/a73acd1f-f4ff-40c3-b4b2-36c72958f4ef"
-export YourDynamoDBArn="arn:aws:dynamodb:ap-southeast-1:701571471198:table/CreditCardTokenizerTable"
-
 
 echo
 echo "#########################################################"
@@ -114,7 +102,45 @@ sam deploy  --stack-name ${STACK_NAME3}                  \
               dynamodbarn=${YourDynamoDBArn}             \
             --tags                                       \
               Project=${PROJECT_ID}
-                  
+
+echo "CloudFormation > Describe Stack ${STACK_NAME3}"              
+aws cloudformation describe-stacks --stack-name ${STACK_NAME3}
+
+## FIXME
+export YourLambdaLayer="arn:aws:lambda:${AWS_REGION}:${AWS_ACCOUNT}:layer:TokenizeData:___"
+export YourKMSArn="arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT}:key/___"
+export YourDynamoDBArn="arn:aws:dynamodb:${AWS_REGION}:${AWS_ACCOUNT}:table/CreditCardTokenizerTable"
+export YourLambdaExecutionRole="arn:aws:iam::${AWS_ACCOUNT}:role/M2M-App-LambdaExecutionRole___"
+export YourUserPoolAppClientId="___"
+export YourPaymentMethodApiURL="https://___.execute-api.${AWS_REGION}.amazonaws.com/dev"
+export ROOTPrincipal="arn:aws:iam::${AWS_ACCOUNT}:root"
+
+POLICY=$(cat << EOF
+{ 
+    "Version": "2012-10-17", 
+    "Id": "kms-cmk-1", 
+    "Statement": [ 
+        { 
+            "Sid": "Enable IAM User Permissions", 
+            "Effect": "Allow", 
+            "Principal": {"AWS": ["$ROOTPrincipal"]}, 
+            "Action": "kms:*", 
+            "Resource": "${YourKMSArn}" 
+        }, 
+        { 
+            "Sid": "Enable IAM User Permissions", 
+            "Effect": "Allow", 
+            "Principal": {"AWS": ["$YourLambdaExecutionRole"]}, 
+            "Action": ["kms:Decrypt", "kms:Encrypt", "kms:GenerateDataKey", "kms:GenerateDataKeyWithoutPlaintext"], 
+            "Resource": "${YourKMSArn}" 
+        } 
+    ] 
+}
+EOF
+); \
+aws kms put-key-policy --key-id "${YourKMSArn}" --policy-name default --policy "$POLICY"
+
+
 # echo
 # echo "#########################################################"
 # echo "[+] Danger!!! Cleanup"
