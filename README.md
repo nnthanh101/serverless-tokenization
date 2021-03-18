@@ -57,7 +57,8 @@ The CloudFormation stack created Customer Managed KMS key and gave permissions t
 * [ ] SAM local development
 
 ```
-export SAM_PROJECT=Tokenizer
+# export SAM_PROJECT=tokenizer
+export SAM_PROJECT=M2M-App
 
 sam init                  \
     --name ${SAM_PROJECT} \
