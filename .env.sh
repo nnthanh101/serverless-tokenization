@@ -15,4 +15,4 @@ fi
 
 ## 3. AWS Infra: S3
 export S3_BUCKET=${PROJECT_ID}-${AWS_REGION}
-export USERNAME=huynhhac.nguyen@gmail.com
+export USERNAME=nnthanh101@gmail.com
