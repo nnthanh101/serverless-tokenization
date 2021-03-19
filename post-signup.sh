@@ -12,8 +12,10 @@ echo "===YourPaymentMethodApiURL https://___.execute-api.${AWS_REGION}.amazonaws
 YourPaymentMethodApiURL=`aws cloudformation describe-stacks --region ${AWS_REGION} --stack-name ${STACK_NAME3}  | \
                          jq -r '.Stacks[].Outputs[] | select(.OutputKey == "PaymentMethodApiURL") | .OutputValue'`
 echo ${YourPaymentMethodApiURL} 
+
+## Cognito >> General settings >> Users and groups >> 
 # Use confirmation code from email to replace this confirmation code and run this script
-aws cognito-idp confirm-sign-up --client-id $YourUserPoolAppClientId  --username $USERNAME --confirmation-code 222039
+aws cognito-idp confirm-sign-up --client-id $YourUserPoolAppClientId  --username $USERNAME --confirmation-code 000562
 
 echo "Note: Cognito Confirm Email"
 YourIdToken=$(aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id $YourUserPoolAppClientId --auth-parameters USERNAME=$USERNAME,PASSWORD=Passw0rd! | jq -r '.AuthenticationResult.IdToken')
