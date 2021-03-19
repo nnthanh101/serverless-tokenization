@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "fc1f698d-a16e-4b13-9838-bbcd65006fe9",
+		"_postman_id": "5c72dcbc-373f-4657-a30d-bce8557ff8c3",
 		"name": "ServerlessTokenizer",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -27,14 +27,20 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\"CustomerOrder\": \"123456789\",\n\"CustomerName\": \"Amazon Web Services\",\n\"CreditCard\": \"0000-0000-0000-0000\",\n\"Address\": \"Unicorn Gym - APJ 2021\"\n}"
+					"raw": "{\n\"CustomerOrder\": \"1234567890\",\n\"CustomerName\": \"AWS UG\",\n\"CreditCard\": \"0000-0000-0000-0000\",\n\"Address\": \"Unicorn Gym - APJ 2021\"\n}"
 				},
 				"url": {
-					"raw": "{{YourPaymentMethodApiURL}}/order",
+					"raw": "https://ywaza4b2r9.execute-api.ap-southeast-2.amazonaws.com/dev/order",
+					"protocol": "https",
 					"host": [
-						"{{YourPaymentMethodApiURL}}"
+						"ywaza4b2r9",
+						"execute-api",
+						"ap-southeast-2",
+						"amazonaws",
+						"com"
 					],
 					"path": [
+						"dev",
 						"order"
 					]
 				}
@@ -63,14 +69,20 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\"CustomerOrder\": \"123456789\"\n}"
+					"raw": "{\n\"CustomerOrder\": \"1234567890\"\n}"
 				},
 				"url": {
-					"raw": "{{YourPaymentMethodApiURL}}/paybill",
+					"raw": "https://ywaza4b2r9.execute-api.ap-southeast-2.amazonaws.com/dev/paybill",
+					"protocol": "https",
 					"host": [
-						"{{YourPaymentMethodApiURL}}"
+						"ywaza4b2r9",
+						"execute-api",
+						"ap-southeast-2",
+						"amazonaws",
+						"com"
 					],
 					"path": [
+						"dev",
 						"paybill"
 					]
 				}
@@ -85,7 +97,8 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				]
+				],
+				"id": "1227237b-1556-4a88-988e-21b02d1b74f2"
 			}
 		},
 		{
@@ -94,14 +107,17 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				]
+				],
+				"id": "7ab27efc-ac18-4792-9d21-6c6c8b0211a6"
 			}
 		}
 	],
 	"variable": [
 		{
+			"id": "0b5cdfa4-43a0-4446-94d4-a304cfad0948",
 			"key": "YourPaymentMethodApiURL",
 			"value": "https://jsdyi1ywwj.execute-api.ap-southeast-2.amazonaws.com/dev"
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
